@@ -1,0 +1,87 @@
+#ifndef SCENE_H
+#define SCENE_H
+
+#include <QGraphicsScene>
+#include <QPen>
+#include <QBrush>
+#include <QGraphicsSceneMouseEvent>
+#include <QGraphicsLineItem>
+#include <QDebug>
+
+class Scene : public QGraphicsScene
+{
+    Q_OBJECT
+
+public:
+    enum Tool
+    {
+        Pen1
+    };
+
+    explicit Scene(QObject *parent = 0);
+    virtual ~Scene();
+
+protected:
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *e);
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *e);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *e);
+
+    void drawBegin(QGraphicsSceneMouseEvent *e);
+    void drawUpdate(QGraphicsSceneMouseEvent *e);
+    void drawEnd(QGraphicsSceneMouseEvent *e);
+
+    QGraphicsLineItem *addLineItem(const QLineF &line);
+
+public slots:
+    void setToolPen(const QPen &p)
+    {
+        mToolPen = p;
+    }
+
+    QPen toolPen() const
+    {
+        return mToolPen;
+    }
+
+    void setToolBrush(const QBrush &b)
+    {
+        mToolBrush = b;
+    }
+
+    QBrush toolBrush() const
+    {
+        return mToolBrush;
+    }
+
+    void setTool(Tool t)
+    {
+        mTool = t;
+    }
+
+    Tool tool() const
+    {
+        return mTool;
+    }
+
+
+    void setPointsList(QList<QList<QPointF>> pointsList);
+    QList<QList<QPointF>> pointsList() const;
+
+    void clear();
+
+private:
+    void init();
+
+    QPen mToolPen;
+    QBrush mToolBrush;
+    Tool mTool;
+
+    bool mIsLButtonOnPress;
+    QPointF mLButtonScenePos;
+    QPointF mLButtonPressScenePos;
+
+    QList<QList<QPointF>> mPointsList;
+    QList<QPointF> mLastCollectedPoints;
+};
+
+#endif // SCENE_H
