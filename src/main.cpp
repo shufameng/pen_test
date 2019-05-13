@@ -11,11 +11,12 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     QSurfaceFormat fmt;
-    fmt.setDepthBufferSize(24);
-    fmt.setStencilBufferSize(8);
+    //fmt.setDepthBufferSize(24);
+    //fmt.setStencilBufferSize(8);
     fmt.setSamples(8);
+    fmt.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
     fmt.setProfile(QSurfaceFormat::CoreProfile);
-    //fmt.setRenderableType(QSurfaceFormat::OpenGLES);
+
     QSurfaceFormat::setDefaultFormat(fmt);
 
 

@@ -14,13 +14,14 @@ PenWindow::PenWindow(QWidget *parent) :
     ui(new Ui::PenWindow)
 {
     ui->setupUi(this);
+    setWindowTitle("Attention: The right side is rendered by OpenGL");
 
     // views
     mRasterView = new View();
-    mRasterView->setScene(new Scene());
+    mRasterView->setScene(mRasterScene = new Scene());
 
     mOpenGLView = new View(true);
-    mOpenGLView->setScene(new Scene());
+    mOpenGLView->setScene(mOpenGLScene = new Scene());
 
     QHBoxLayout *hlay = new QHBoxLayout(centralWidget());
     hlay->addWidget(mRasterView);
@@ -35,6 +36,12 @@ PenWindow::PenWindow(QWidget *parent) :
     connect(mPenSetWgt->ui->pushButton_r2o, SIGNAL(clicked()), this, SLOT(onR2O()));
     connect(mPenSetWgt->ui->pushButtonCleanAll, SIGNAL(clicked()), this, SLOT(onCleanAll()));
 
+    // Checkable buttons
+    QButtonGroup *penTypeButtonGroup = new QButtonGroup(this);
+    penTypeButtonGroup->addButton(mPenSetWgt->ui->toolButtonPen_StraightLines);
+    penTypeButtonGroup->addButton(mPenSetWgt->ui->toolButtonPen_Points);
+    connect(penTypeButtonGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(onPenTypeButtonGroupButtonClicked(QAbstractButton*)));
+
     //
     updateUI();
 }
@@ -46,56 +53,87 @@ PenWindow::~PenWindow()
 
 void PenWindow::onPenColor()
 {
-    Scene *s = mRasterView->getScene();
-    if (!s)
-        return;
-
-    QColor cl = QColorDialog::getColor(s->toolPen().color());
+    QColor cl = QColorDialog::getColor(mRasterScene->toolPen().color());
     if (cl.isValid())
     {
-        QPen p = getPen();
+        QPen p = mRasterScene->toolPen();
         p.setColor(cl);
 
-        setPen(p);
+        setScenesToolPen(p);
     }
 }
 
 void PenWindow::onPenWidthChanged(int w)
 {
-    QPen p = getPen();
+    QPen p = mRasterScene->toolPen();
     p.setWidth(w);
-    setPen(p);
+
+    setScenesToolPen(p);
 }
 
 void PenWindow::onR2O()
 {
-    mOpenGLView->getScene()->setPointsList(mRasterView->getScene()->pointsList());
+    mOpenGLScene->setPointsList(mRasterScene->pointsList());
 }
 
 void PenWindow::onO2R()
 {
-    mRasterView->getScene()->setPointsList(mOpenGLView->getScene()->pointsList());
+   mRasterScene->setPointsList(mOpenGLScene->pointsList());
 }
 
 void PenWindow::onCleanAll()
 {
-    mRasterView->getScene()->clear();
-    mOpenGLView->getScene()->clear();
+    mRasterScene->clear();
+    mOpenGLScene->clear();
 }
 
-QPen PenWindow::getPen()
+void PenWindow::onPenTypeButtonGroupButtonClicked(QAbstractButton *button)
 {
-    return mRasterView->getScene()->toolPen();
-}
-
-void PenWindow::setPen(const QPen &p)
-{
-    mRasterView->getScene()->setToolPen(p);
-    mOpenGLView->getScene()->setToolPen(p);
+    if (button == mPenSetWgt->ui->toolButtonPen_StraightLines)
+    {
+        setScenesTool(Scene::Pen_DrawStraightLine);
+    }
+    else if (button == mPenSetWgt->ui->toolButtonPen_Points)
+    {
+        setScenesTool(Scene::Pen_DrawPoints);
+    }
 }
 
 void PenWindow::updateUI()
 {
-    mPenSetWgt->ui->spinBoxPenWidth->setValue(getPen().width());
-    mPenSetWgt->ui->toolButtonPenColor->setIcon(CommonFunc::generateColorIcon(getPen().color()));
+    mPenSetWgt->ui->spinBoxPenWidth->setValue(mRasterScene->toolPen().width());
+    mPenSetWgt->ui->toolButtonPenColor->setIcon(CommonFunc::generateColorIcon(mRasterScene->toolPen().color()));
+
+    Scene::Tool tool = mRasterScene->tool();
+    if (tool == Scene::Pen_DrawStraightLine)
+        mPenSetWgt->ui->toolButtonPen_StraightLines->setChecked(true);
+    else if (tool == Scene::Pen_DrawPoints)
+        mPenSetWgt->ui->toolButtonPen_Points->setChecked(true);
 }
+
+void PenWindow::setScenesToolPen(const QPen &pen)
+{
+    mRasterScene->setToolPen(pen);
+    mOpenGLScene->setToolPen(pen);
+}
+
+void PenWindow::setScenesTool(int tool)
+{
+    mRasterScene->setTool((Scene::Tool)tool);
+    mOpenGLScene->setTool((Scene::Tool)tool);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

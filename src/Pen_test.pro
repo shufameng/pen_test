@@ -18,14 +18,18 @@ SOURCES += main.cpp\
     view.cpp \
     scene.cpp \
     pensetwidget.cpp \
-    commonfunc.cpp
+    commonfunc.cpp \
+    additemthread.cpp \
+    items.cpp
 
 HEADERS  += penwindow.h \
     openglwidget.h \
     view.h \
     scene.h \
     pensetwidget.h \
-    commonfunc.h
+    commonfunc.h \
+    additemthread.h \
+    items.h
 
 FORMS    += penwindow.ui \
     pensetwidget.ui

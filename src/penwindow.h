@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPen>
+#include <QPushButton>
 
 namespace Ui {
 class PenWindow;
@@ -10,6 +11,7 @@ class PenWindow;
 
 class View;
 class PenSetWidget;
+class Scene;
 class PenWindow : public QMainWindow
 {
     Q_OBJECT
@@ -22,7 +24,9 @@ private:
     Ui::PenWindow *ui;
 
     View *mRasterView;
+    Scene *mRasterScene;
     View *mOpenGLView;
+    Scene *mOpenGLScene;
 
     PenSetWidget *mPenSetWgt;
 
@@ -32,11 +36,13 @@ private slots:
     void onR2O();
     void onO2R();
     void onCleanAll();
+    void onPenTypeButtonGroupButtonClicked(QAbstractButton *button);
 
-    QPen getPen();
-    void setPen(const QPen &p);
 
     void updateUI();
+
+    void setScenesToolPen(const QPen &pen);
+    void setScenesTool(int tool);
 };
 
 #endif // PENWINDOW_H

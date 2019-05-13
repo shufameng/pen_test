@@ -35,11 +35,6 @@ Scene *View::getScene()
 
 void View::mouseMoveEvent(QMouseEvent *event)
 {
-    //QCursor cs = cursor();qDebug() << cs.hotSpot();
-    //cs.setPos(0, 0);
-    //setCursor(cs);
-    //cs.setPos();
-
     return QGraphicsView::mouseMoveEvent(event);
 }
 

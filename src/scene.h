@@ -15,7 +15,10 @@ class Scene : public QGraphicsScene
 public:
     enum Tool
     {
-        Pen1
+        // »­Ö±Ïß
+        Pen_DrawStraightLine,
+        // »­µã
+        Pen_DrawPoints
     };
 
     explicit Scene(QObject *parent = 0);
@@ -26,11 +29,8 @@ protected:
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *e);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *e);
 
-    void drawBegin(QGraphicsSceneMouseEvent *e);
-    void drawUpdate(QGraphicsSceneMouseEvent *e);
-    void drawEnd(QGraphicsSceneMouseEvent *e);
-
-    QGraphicsLineItem *addLineItem(const QLineF &line);
+    QGraphicsLineItem *_addLine(const QLineF &line);
+    QGraphicsItem *_addPoint(const QPointF &point);
 
 public slots:
     void setToolPen(const QPen &p)

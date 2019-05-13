@@ -1,4 +1,6 @@
 #include "scene.h"
+#include "additemthread.h"
+#include "items.h"
 
 
 Scene::Scene(QObject *parent) :
@@ -18,10 +20,19 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *e)
     {
         QPointF sp = e->scenePos();
 
+        // Collect point
+        mLastCollectedPoints.clear();
+        mLastCollectedPoints.append(e->scenePos());
+
+        // Remember mouse button status
         mIsLButtonOnPress = true;
         mLButtonPressScenePos = mLButtonScenePos = sp;
 
-        drawBegin(e);
+        // Draw it
+        if (Pen_DrawStraightLine == mTool)
+        {
+
+        }
     }
 }
 
@@ -29,9 +40,29 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
 {
     if (mIsLButtonOnPress)
     {
-        drawUpdate(e);
+        QPointF sp = e->scenePos();
 
-        mLButtonScenePos = e->scenePos();
+        // Collect point
+        mLastCollectedPoints.append(sp);
+
+        // Draw it
+        if (Pen_DrawStraightLine == mTool)
+        {
+            if (QLineF(mLButtonScenePos, sp).length() >= 1)
+            {
+                _addLine(QLineF(mLButtonScenePos, sp));
+                // Remember left mouse button last position
+                mLButtonScenePos = sp;
+            }
+        }
+        else if (Pen_DrawPoints == mTool)
+        {
+            if (QLineF(mLButtonScenePos, sp).length() >= mToolPen.widthF())
+            {
+                _addPoint(sp);
+                mLButtonPressScenePos = sp;
+            }
+        }
     }
 }
 
@@ -39,44 +70,27 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
 {
     if (e->button() & Qt::LeftButton)
     {
+        // Remember mouse button status
         mIsLButtonOnPress = false;
 
-        drawEnd(e);
-    }
-}
-
-void Scene::drawBegin(QGraphicsSceneMouseEvent *e)
-{
-    if (mTool == Pen1)
-    {
-        mLastCollectedPoints.clear();
+        // Collect point
         mLastCollectedPoints.append(e->scenePos());
-    }
-}
-
-void Scene::drawUpdate(QGraphicsSceneMouseEvent *e)
-{
-    if (mTool == Pen1)
-    {
-        mLastCollectedPoints.append(e->scenePos());
-
-        addLineItem(QLineF(mLButtonScenePos, e->scenePos()));
-    }
-}
-
-void Scene::drawEnd(QGraphicsSceneMouseEvent *e)
-{
-    if (mTool == Pen1)
-    {
-        mLastCollectedPoints.append(e->scenePos());
-
         mPointsList.append(mLastCollectedPoints);
     }
 }
 
-QGraphicsLineItem *Scene::addLineItem(const QLineF &line)
+QGraphicsLineItem *Scene::_addLine(const QLineF &line)
 {
-    QGraphicsLineItem *item = new QGraphicsLineItem(line);
+    LineItem *item = new LineItem(line);
+    item->setPen(toolPen());
+    addItem(item);
+
+    return item;
+}
+
+QGraphicsItem *Scene::_addPoint(const QPointF &point)
+{
+    PointItem *item = new PointItem(point);
     item->setPen(toolPen());
     addItem(item);
 
@@ -95,7 +109,7 @@ void Scene::setPointsList(QList<QList<QPointF> > pointsList)
 
         for (int j = 0; j + 1 < points.size(); ++j)
         {
-            addLineItem(QLineF(points.at(j), points.at(j + 1)));
+            _addLine(QLineF(points.at(j), points.at(j + 1)));
         }
     }
 }
@@ -119,10 +133,10 @@ void Scene::init()
     mToolPen.setStyle(Qt::SolidLine);
     mToolPen.setCapStyle(Qt::RoundCap);
     mToolPen.setJoinStyle(Qt::RoundJoin);
-    mToolPen.setColor(Qt::red);
+    mToolPen.setColor(Qt::white);
     mToolPen.setWidth(2);
 
-    mTool = Pen1;
+    mTool = Pen_DrawStraightLine;
     mIsLButtonOnPress = false;
 
     QBrush b;
