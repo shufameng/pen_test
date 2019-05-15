@@ -15,6 +15,7 @@ public:
     explicit PenSetWidget(QWidget *parent = 0);
     ~PenSetWidget();
     Ui::PenSetWidget *ui;
+
 };
 
 #endif // PENSETWIDGET_H

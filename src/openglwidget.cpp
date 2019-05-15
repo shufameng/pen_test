@@ -53,10 +53,15 @@ void OpenGLWidget::initializeGL()
 
 void OpenGLWidget::paintGL()
 {
-
+qDebug() << "OpenGLWidget::paintGL()";
 }
 
 void OpenGLWidget::resizeGL(int w, int h)
 {
+qDebug() << "OpenGLWidget::resizeGL(int w, int h)";
+}
 
+void OpenGLWidget::paintEvent(QPaintEvent *e)
+{
+qDebug() << "OpenGLWidget::paintEvent(QPaintEvent *e)";
 }

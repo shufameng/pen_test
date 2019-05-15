@@ -1,0 +1,1 @@
+#include "edgeblureffect.h"

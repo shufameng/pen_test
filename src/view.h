@@ -18,6 +18,7 @@ public:
 
 protected:
     virtual void mouseMoveEvent(QMouseEvent *event);
+    virtual void paintEvent(QPaintEvent *e);
 
 private:
     void init();

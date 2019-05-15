@@ -11,7 +11,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Pen_test
 TEMPLATE = app
 
-
 SOURCES += main.cpp\
         penwindow.cpp \
     openglwidget.cpp \
@@ -20,7 +19,8 @@ SOURCES += main.cpp\
     pensetwidget.cpp \
     commonfunc.cpp \
     additemthread.cpp \
-    items.cpp
+    items.cpp \
+    edgeblureffect.cpp
 
 HEADERS  += penwindow.h \
     openglwidget.h \
@@ -29,7 +29,8 @@ HEADERS  += penwindow.h \
     pensetwidget.h \
     commonfunc.h \
     additemthread.h \
-    items.h
+    items.h \
+    edgeblureffect.h
 
 FORMS    += penwindow.ui \
     pensetwidget.ui

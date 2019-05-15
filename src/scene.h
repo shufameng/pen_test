@@ -8,6 +8,7 @@
 #include <QGraphicsLineItem>
 #include <QDebug>
 
+class LineItem;
 class Scene : public QGraphicsScene
 {
     Q_OBJECT
@@ -29,7 +30,7 @@ protected:
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *e);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *e);
 
-    QGraphicsLineItem *_addLine(const QLineF &line);
+    LineItem *_addLine(const QLineF &line);
     QGraphicsItem *_addPoint(const QPointF &point);
 
 public slots:
@@ -69,6 +70,19 @@ public slots:
 
     void clear();
 
+    void saveAs(const QString &filePath);
+
+    qreal blurRadius() const
+    {
+        return mBlurRadius;
+    }
+
+    void setBlurRadius(qreal radius)
+    {
+        mBlurRadius = radius;
+    }
+
+
 private:
     void init();
 
@@ -82,6 +96,10 @@ private:
 
     QList<QList<QPointF>> mPointsList;
     QList<QPointF> mLastCollectedPoints;
+    QList<LineItem*> mLastCreatedLineItems;
+
+    qreal mBlurRadius;
+
 };
 
 #endif // SCENE_H

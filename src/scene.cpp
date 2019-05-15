@@ -1,7 +1,8 @@
 #include "scene.h"
 #include "additemthread.h"
 #include "items.h"
-
+#include <QImage>
+#include "edgeblureffect.h"
 
 Scene::Scene(QObject *parent) :
     QGraphicsScene(parent)
@@ -23,6 +24,9 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *e)
         // Collect point
         mLastCollectedPoints.clear();
         mLastCollectedPoints.append(e->scenePos());
+
+        // Collect items
+        mLastCreatedLineItems.clear();
 
         // Remember mouse button status
         mIsLButtonOnPress = true;
@@ -48,9 +52,9 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
         // Draw it
         if (Pen_DrawStraightLine == mTool)
         {
-            if (QLineF(mLButtonScenePos, sp).length() >= 1)
+            if (QLineF(mLButtonScenePos, sp).length() >= 0.5)
             {
-                _addLine(QLineF(mLButtonScenePos, sp));
+                mLastCreatedLineItems.append(_addLine(QLineF(mLButtonScenePos, sp)));
                 // Remember left mouse button last position
                 mLButtonScenePos = sp;
             }
@@ -76,10 +80,30 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
         // Collect point
         mLastCollectedPoints.append(e->scenePos());
         mPointsList.append(mLastCollectedPoints);
+
+        QGraphicsItemGroup *group = new QGraphicsItemGroup;
+        for (int i = 0; i < mLastCreatedLineItems.size(); ++i)
+        {
+            group->addToGroup(mLastCreatedLineItems[i]);
+        }
+        addItem(group);
+
+        if (Pen_DrawStraightLine == mTool)
+        {
+//            QGraphicsBlurEffect *effect = new QGraphicsBlurEffect;
+//            effect->setBlurHints(QGraphicsBlurEffect::PerformanceHint);
+//            effect->setBlurRadius(mBlurRadius);
+
+            EdgeBlurEffect *effect = new EdgeBlurEffect;
+
+            group->setGraphicsEffect(effect);
+
+
+        }
     }
 }
 
-QGraphicsLineItem *Scene::_addLine(const QLineF &line)
+LineItem *Scene::_addLine(const QLineF &line)
 {
     LineItem *item = new LineItem(line);
     item->setPen(toolPen());
@@ -125,6 +149,24 @@ void Scene::clear()
     mPointsList.clear();
 }
 
+void Scene::saveAs(const QString &filePath)
+{
+    QGraphicsItemGroup *g = createItemGroup(items());
+    QRectF r = g->boundingRect();
+
+    QImage image(r.size().toSize(), QImage::Format_RGB32);
+    QPainter painter(&image);
+    painter.setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing);
+    render(&painter, image.rect(), r);
+
+    image.save(filePath);
+
+//    Pixel::Bitmap bitmap;
+//    bitmap.Load(filePath.toLocal8Bit().constData());
+//    bitmap.SetAntiAliasing(Pixel::AA_HIGH);
+
+}
+
 
 void Scene::init()
 {
@@ -134,7 +176,7 @@ void Scene::init()
     mToolPen.setCapStyle(Qt::RoundCap);
     mToolPen.setJoinStyle(Qt::RoundJoin);
     mToolPen.setColor(Qt::white);
-    mToolPen.setWidth(2);
+    mToolPen.setWidth(8);
 
     mTool = Pen_DrawStraightLine;
     mIsLButtonOnPress = false;
@@ -143,4 +185,6 @@ void Scene::init()
     b.setStyle(Qt::SolidPattern);
     b.setColor(Qt::black);
     setBackgroundBrush(b);
+
+    mBlurRadius = 1.05;
 }

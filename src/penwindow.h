@@ -37,12 +37,14 @@ private slots:
     void onO2R();
     void onCleanAll();
     void onPenTypeButtonGroupButtonClicked(QAbstractButton *button);
-
+    void onSaveAs();
+    void onBlurRadiusChanged(double value);
 
     void updateUI();
 
     void setScenesToolPen(const QPen &pen);
     void setScenesTool(int tool);
 };
+
 
 #endif // PENWINDOW_H

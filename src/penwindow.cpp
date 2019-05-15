@@ -8,6 +8,7 @@
 #include "ui_pensetwidget.h"
 #include <QColorDialog>
 #include "commonfunc.h"
+#include <QFileDialog>
 
 PenWindow::PenWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -35,6 +36,8 @@ PenWindow::PenWindow(QWidget *parent) :
     connect(mPenSetWgt->ui->pushButton_o2r, SIGNAL(clicked()), this, SLOT(onO2R()));
     connect(mPenSetWgt->ui->pushButton_r2o, SIGNAL(clicked()), this, SLOT(onR2O()));
     connect(mPenSetWgt->ui->pushButtonCleanAll, SIGNAL(clicked()), this, SLOT(onCleanAll()));
+    connect(mPenSetWgt->ui->pushButtonSaveAs, SIGNAL(clicked()), this, SLOT(onSaveAs()));
+    connect(mPenSetWgt->ui->doubleSpinBoxBlurRadius, SIGNAL(valueChanged(double)), this, SLOT(onBlurRadiusChanged(double)));
 
     // Checkable buttons
     QButtonGroup *penTypeButtonGroup = new QButtonGroup(this);
@@ -60,6 +63,7 @@ void PenWindow::onPenColor()
         p.setColor(cl);
 
         setScenesToolPen(p);
+        updateUI();
     }
 }
 
@@ -69,6 +73,7 @@ void PenWindow::onPenWidthChanged(int w)
     p.setWidth(w);
 
     setScenesToolPen(p);
+    updateUI();
 }
 
 void PenWindow::onR2O()
@@ -99,6 +104,21 @@ void PenWindow::onPenTypeButtonGroupButtonClicked(QAbstractButton *button)
     }
 }
 
+void PenWindow::onSaveAs()
+{
+    QString path = QFileDialog::getSaveFileName(this);
+    if (path.isEmpty())
+        return;
+
+    mRasterScene->saveAs(path);
+}
+
+void PenWindow::onBlurRadiusChanged(double value)
+{
+    mRasterScene->setBlurRadius((qreal)value);
+    mOpenGLScene->setBlurRadius((qreal)value);
+}
+
 void PenWindow::updateUI()
 {
     mPenSetWgt->ui->spinBoxPenWidth->setValue(mRasterScene->toolPen().width());
@@ -109,6 +129,8 @@ void PenWindow::updateUI()
         mPenSetWgt->ui->toolButtonPen_StraightLines->setChecked(true);
     else if (tool == Scene::Pen_DrawPoints)
         mPenSetWgt->ui->toolButtonPen_Points->setChecked(true);
+
+    mPenSetWgt->ui->doubleSpinBoxBlurRadius->setValue(mRasterScene->blurRadius());
 }
 
 void PenWindow::setScenesToolPen(const QPen &pen)

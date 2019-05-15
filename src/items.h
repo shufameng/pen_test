@@ -6,13 +6,24 @@
 #include <QStyleOptionGraphicsItem>
 #include <QPen>
 #include <QBrush>
+#include <QGraphicsBlurEffect>
+#include <QGraphicsOpacityEffect>
 
 class LineItem : public QGraphicsLineItem
 {
 public:
     explicit LineItem(QGraphicsItem *parent = 0) :
         QGraphicsLineItem(parent)
-    {}
+    {
+
+//        QGraphicsBlurEffect *effect = new QGraphicsBlurEffect;
+//        effect->setBlurRadius(10);
+//        setGraphicsEffect(effect);
+
+//        QGraphicsOpacityEffect *opa = new QGraphicsOpacityEffect;
+//        opa->setOpacity(0.5);
+//        setGraphicsEffect(opa);
+    }
     explicit LineItem(const QLineF &li, QGraphicsItem *parent = 0) :
         QGraphicsLineItem(li, parent)
     {}
