@@ -3,6 +3,10 @@
 #include "items.h"
 #include <QImage>
 #include "edgeblureffect.h"
+#include "itemgroup.h"
+
+
+
 
 Scene::Scene(QObject *parent) :
     QGraphicsScene(parent)
@@ -81,7 +85,7 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
         mLastCollectedPoints.append(e->scenePos());
         mPointsList.append(mLastCollectedPoints);
 
-        QGraphicsItemGroup *group = new QGraphicsItemGroup;
+        ItemGroup *group = new ItemGroup;
         for (int i = 0; i < mLastCreatedLineItems.size(); ++i)
         {
             group->addToGroup(mLastCreatedLineItems[i]);
@@ -186,5 +190,5 @@ void Scene::init()
     b.setColor(Qt::black);
     setBackgroundBrush(b);
 
-    mBlurRadius = 1.05;
+    mBlurRadius = 1;
 }

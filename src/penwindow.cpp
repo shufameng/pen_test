@@ -26,7 +26,7 @@ PenWindow::PenWindow(QWidget *parent) :
 
     QHBoxLayout *hlay = new QHBoxLayout(centralWidget());
     hlay->addWidget(mRasterView);
-    hlay->addWidget(mOpenGLView);
+    //hlay->addWidget(mOpenGLView);
 
     // PenSetWidget
     mPenSetWgt = new PenSetWidget(this);

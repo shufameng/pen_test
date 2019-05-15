@@ -23,7 +23,7 @@ public:
 //        QGraphicsOpacityEffect *opa = new QGraphicsOpacityEffect;
 //        opa->setOpacity(0.5);
 //        setGraphicsEffect(opa);
-    }
+     }
     explicit LineItem(const QLineF &li, QGraphicsItem *parent = 0) :
         QGraphicsLineItem(li, parent)
     {}
