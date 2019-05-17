@@ -39,6 +39,8 @@ private slots:
     void onPenTypeButtonGroupButtonClicked(QAbstractButton *button);
     void onSaveAs();
     void onBlurRadiusChanged(double value);
+    void onMinLineLengthChanged(double value);
+    void onConnectPointsMethodChanged(int value);
 
     void updateUI();
 

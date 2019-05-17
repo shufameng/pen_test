@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>165</width>
+    <width>233</width>
     <height>455</height>
    </rect>
   </property>
@@ -20,27 +20,6 @@
       <widget class="QSpinBox" name="spinBoxPenWidth">
        <property name="minimum">
         <number>0</number>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>画笔颜色:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QToolButton" name="toolButtonPenColor">
-       <property name="text">
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>画笔宽度:</string>
        </property>
       </widget>
      </item>
@@ -64,10 +43,76 @@
        </property>
       </widget>
      </item>
+     <item row="1" column="1">
+      <widget class="QToolButton" name="toolButtonPenColor">
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
      <item row="2" column="1">
       <widget class="QDoubleSpinBox" name="doubleSpinBoxBlurRadius">
        <property name="singleStep">
         <double>0.010000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>画笔颜色:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>画笔宽度:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Min Line Length:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QDoubleSpinBox" name="doubleSpinBoxMinLineLength">
+       <property name="singleStep">
+        <double>0.100000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QComboBox" name="comboBoxConnectPointsMethod">
+       <item>
+        <property name="text">
+         <string>No Connect</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Straight Connect</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Curve Connect</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Curve Connect Midway</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Connect Points Method:</string>
        </property>
       </widget>
      </item>

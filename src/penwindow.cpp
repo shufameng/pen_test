@@ -21,7 +21,7 @@ PenWindow::PenWindow(QWidget *parent) :
     mRasterView = new View();
     mRasterView->setScene(mRasterScene = new Scene());
 
-    mOpenGLView = new View(true);
+    mOpenGLView = new View();
     mOpenGLView->setScene(mOpenGLScene = new Scene());
 
     QHBoxLayout *hlay = new QHBoxLayout(centralWidget());
@@ -38,6 +38,8 @@ PenWindow::PenWindow(QWidget *parent) :
     connect(mPenSetWgt->ui->pushButtonCleanAll, SIGNAL(clicked()), this, SLOT(onCleanAll()));
     connect(mPenSetWgt->ui->pushButtonSaveAs, SIGNAL(clicked()), this, SLOT(onSaveAs()));
     connect(mPenSetWgt->ui->doubleSpinBoxBlurRadius, SIGNAL(valueChanged(double)), this, SLOT(onBlurRadiusChanged(double)));
+    connect(mPenSetWgt->ui->doubleSpinBoxMinLineLength, SIGNAL(valueChanged(double)), this, SLOT(onMinLineLengthChanged(double)));
+    connect(mPenSetWgt->ui->comboBoxConnectPointsMethod, SIGNAL(activated(int)), this, SLOT(onConnectPointsMethodChanged(int)));
 
     // Checkable buttons
     QButtonGroup *penTypeButtonGroup = new QButtonGroup(this);
@@ -119,6 +121,18 @@ void PenWindow::onBlurRadiusChanged(double value)
     mOpenGLScene->setBlurRadius((qreal)value);
 }
 
+void PenWindow::onMinLineLengthChanged(double value)
+{
+    mRasterScene->setMinLineLength(value);
+    mOpenGLScene->setMinLineLength(value);
+}
+
+void PenWindow::onConnectPointsMethodChanged(int value)
+{
+    mRasterScene->setConnectPointsMethod((Scene::ConnectPointsMethod)value);
+    mOpenGLScene->setConnectPointsMethod((Scene::ConnectPointsMethod)value);
+}
+
 void PenWindow::updateUI()
 {
     mPenSetWgt->ui->spinBoxPenWidth->setValue(mRasterScene->toolPen().width());
@@ -131,6 +145,10 @@ void PenWindow::updateUI()
         mPenSetWgt->ui->toolButtonPen_Points->setChecked(true);
 
     mPenSetWgt->ui->doubleSpinBoxBlurRadius->setValue(mRasterScene->blurRadius());
+    mPenSetWgt->ui->doubleSpinBoxMinLineLength->setValue(mRasterScene->minLineLength());
+
+    Scene::ConnectPointsMethod method = mRasterScene->connectPointsMethod();
+    mPenSetWgt->ui->comboBoxConnectPointsMethod->setCurrentIndex((int)method);
 }
 
 void PenWindow::setScenesToolPen(const QPen &pen)

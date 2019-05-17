@@ -5,7 +5,8 @@
 #include "edgeblureffect.h"
 #include "itemgroup.h"
 
-
+#include "view.h"
+#include <QGraphicsPathItem>
 
 
 Scene::Scene(QObject *parent) :
@@ -41,6 +42,11 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *e)
         {
 
         }
+        else if (Pen_DrawPoints == mTool)
+        {
+            mlastCreatedPointItems.clear();
+            mlastCreatedPointItems.append(_addPoint(sp));
+        }
     }
 }
 
@@ -56,18 +62,20 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
         // Draw it
         if (Pen_DrawStraightLine == mTool)
         {
-            if (QLineF(mLButtonScenePos, sp).length() >= 0.5)
+            if (QLineF(mLButtonScenePos, sp).length() >= mMinLineLength)
             {
-                mLastCreatedLineItems.append(_addLine(QLineF(mLButtonScenePos, sp)));
+                LineItem *item = _addLine(QLineF(mLButtonScenePos, sp));
+
+                mLastCreatedLineItems.append(item);
                 // Remember left mouse button last position
                 mLButtonScenePos = sp;
             }
         }
         else if (Pen_DrawPoints == mTool)
         {
-            if (QLineF(mLButtonScenePos, sp).length() >= mToolPen.widthF())
+            if (QLineF(mLButtonScenePos, sp).length() >= 0)
             {
-                _addPoint(sp);
+                mlastCreatedPointItems.append(_addPoint(sp));
                 mLButtonPressScenePos = sp;
             }
         }
@@ -92,6 +100,11 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
         }
         addItem(group);
 
+
+//        QGraphicsView *v = views().first();
+//        v->viewport()->update(v->mapFromScene(group->boundingRect()));
+
+
         if (Pen_DrawStraightLine == mTool)
         {
 //            QGraphicsBlurEffect *effect = new QGraphicsBlurEffect;
@@ -100,8 +113,73 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
 
             EdgeBlurEffect *effect = new EdgeBlurEffect;
 
+            //BlurEffect *effect  = new BlurEffect;
+
             group->setGraphicsEffect(effect);
 
+        }
+        else if (Pen_DrawPoints == mTool)
+        {
+            QPainterPath path;
+
+            switch (mConnectPointsMethod)
+            {
+            case StraightConnect:
+            {
+                for (int i = 0; i < mLastCollectedPoints.size(); ++ i) {
+                    if (0 == i) {
+                        path.moveTo(mLastCollectedPoints.at(i));
+                    } else {
+                        path.lineTo(mLastCollectedPoints.at(i));
+                    }
+                }
+            }
+                break;
+            case CurveConnect:
+            {
+                for (int i = 0; i + 2 < mLastCollectedPoints.size(); i += 2) {
+                    if (0 == i) {
+                        path.moveTo(mLastCollectedPoints.at(i));
+                    }
+                    path.quadTo(mLastCollectedPoints.at(i + 1), mLastCollectedPoints.at(i + 2));
+                }
+            }
+                break;
+            case CurveConnectMidWay:
+            {
+                QPointF current, next;
+                for (int i = 0; i + 1 < mLastCollectedPoints.size(); ++ i) {
+
+                    current = mLastCollectedPoints.at(i);
+                    next = mLastCollectedPoints.at(i + 1);
+
+                    if (0 == i) {
+                        path.moveTo(current);
+                        path.lineTo((current + next) / 2);
+                    } else {
+                        path.quadTo(current, (current + next) / 2);
+                    }
+
+                }
+            }
+                break;
+            default:
+                break;
+            }
+
+            // add pathitem to scene
+            QGraphicsPathItem *item = addPath(path);
+            item->setPen(toolPen());
+
+            // delete points items
+
+            PointItem *pointItem = NULL;
+            for (int i = 0; i < mlastCreatedPointItems.size(); ++ i)
+            {
+                pointItem = mlastCreatedPointItems[i];
+
+                removeItem(pointItem);
+            }
 
         }
     }
@@ -116,7 +194,7 @@ LineItem *Scene::_addLine(const QLineF &line)
     return item;
 }
 
-QGraphicsItem *Scene::_addPoint(const QPointF &point)
+PointItem *Scene::_addPoint(const QPointF &point)
 {
     PointItem *item = new PointItem(point);
     item->setPen(toolPen());
@@ -180,9 +258,10 @@ void Scene::init()
     mToolPen.setCapStyle(Qt::RoundCap);
     mToolPen.setJoinStyle(Qt::RoundJoin);
     mToolPen.setColor(Qt::white);
-    mToolPen.setWidth(8);
+    mToolPen.setWidth(3);
 
-    mTool = Pen_DrawStraightLine;
+    mTool = Pen_DrawPoints;
+    mConnectPointsMethod = CurveConnect;
     mIsLButtonOnPress = false;
 
     QBrush b;
@@ -191,4 +270,5 @@ void Scene::init()
     setBackgroundBrush(b);
 
     mBlurRadius = 1;
+    mMinLineLength = 1;
 }

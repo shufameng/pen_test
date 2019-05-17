@@ -12,23 +12,32 @@
 class LineItem : public QGraphicsLineItem
 {
 public:
+    static int sg_max_lineitem_id;
+
     explicit LineItem(QGraphicsItem *parent = 0) :
         QGraphicsLineItem(parent)
     {
-
-//        QGraphicsBlurEffect *effect = new QGraphicsBlurEffect;
-//        effect->setBlurRadius(10);
-//        setGraphicsEffect(effect);
-
-//        QGraphicsOpacityEffect *opa = new QGraphicsOpacityEffect;
-//        opa->setOpacity(0.5);
-//        setGraphicsEffect(opa);
-     }
+        mId = sg_max_lineitem_id ++;
+    }
     explicit LineItem(const QLineF &li, QGraphicsItem *parent = 0) :
         QGraphicsLineItem(li, parent)
     {}
     virtual ~LineItem()
     {}
+
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+    {
+        painter->setRenderHints(QPainter::Antialiasing);
+        QGraphicsLineItem::paint(painter, option, widget);
+    }
+
+    int id() const
+    {
+        return mId;
+    }
+
+private:
+    int mId;
 };
 
 

@@ -9,6 +9,7 @@
 #include <QDebug>
 
 class LineItem;
+class PointItem;
 class Scene : public QGraphicsScene
 {
     Q_OBJECT
@@ -22,6 +23,14 @@ public:
         Pen_DrawPoints
     };
 
+    enum ConnectPointsMethod
+    {
+        NoConnect,
+        StraightConnect,
+        CurveConnect,
+        CurveConnectMidWay
+    };
+
     explicit Scene(QObject *parent = 0);
     virtual ~Scene();
 
@@ -31,7 +40,7 @@ protected:
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *e);
 
     LineItem *_addLine(const QLineF &line);
-    QGraphicsItem *_addPoint(const QPointF &point);
+    PointItem *_addPoint(const QPointF &point);
 
 public slots:
     void setToolPen(const QPen &p)
@@ -82,6 +91,25 @@ public slots:
         mBlurRadius = radius;
     }
 
+    qreal minLineLength() const
+    {
+        return mMinLineLength;
+    }
+
+    void setMinLineLength(qreal len)
+    {
+        mMinLineLength = len;
+    }
+
+    void setConnectPointsMethod(ConnectPointsMethod method)
+    {
+        mConnectPointsMethod = method;
+    }
+
+    ConnectPointsMethod connectPointsMethod() const
+    {
+        return mConnectPointsMethod;
+    }
 
 private:
     void init();
@@ -89,6 +117,7 @@ private:
     QPen mToolPen;
     QBrush mToolBrush;
     Tool mTool;
+    ConnectPointsMethod mConnectPointsMethod;
 
     bool mIsLButtonOnPress;
     QPointF mLButtonScenePos;
@@ -98,8 +127,10 @@ private:
     QList<QPointF> mLastCollectedPoints;
     QList<LineItem*> mLastCreatedLineItems;
 
-    qreal mBlurRadius;
+    QList<PointItem*> mlastCreatedPointItems;
 
+    qreal mBlurRadius;
+    qreal mMinLineLength;
 };
 
 #endif // SCENE_H
