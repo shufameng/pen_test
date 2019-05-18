@@ -22,6 +22,7 @@ View::View(bool useOpenGL, QWidget *parent)
         OpenGLWidget *openglView = new OpenGLWidget(this);
         setViewport(openglView);
     }
+    setRenderHints(QPainter::Antialiasing);
 
     qDebug() << viewportUpdateMode();
 }

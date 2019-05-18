@@ -51,6 +51,7 @@ private slots:
     void on_actionCurveConnect_triggered();
     void on_actionCurveConnectUsePainterPath_triggered();
     void on_actionOpenFramelessDialog_triggered();
+    void on_actionOpenGLDialog_triggered();
 };
 
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>683</width>
-    <height>422</height>
+    <width>984</width>
+    <height>542</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>683</width>
+     <width>984</width>
      <height>23</height>
     </rect>
    </property>
@@ -32,6 +32,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionOpenDialog"/>
+   <addaction name="actionOpenGLDialog"/>
    <addaction name="actionOpenFramelessDialog"/>
    <addaction name="actionCleanAll"/>
    <addaction name="actionCurveConnect"/>
@@ -67,6 +68,11 @@
   <action name="actionOpenFramelessDialog">
    <property name="text">
     <string>OpenFramelessDialog</string>
+   </property>
+  </action>
+  <action name="actionOpenGLDialog">
+   <property name="text">
+    <string>OpenGLDialog</string>
    </property>
   </action>
  </widget>

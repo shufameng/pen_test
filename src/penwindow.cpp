@@ -194,3 +194,10 @@ void PenWindow::on_actionOpenFramelessDialog_triggered()
     v->resize(600, 400);
     v->showFullScreen();
 }
+
+void PenWindow::on_actionOpenGLDialog_triggered()
+{
+    View *v = new View(true);
+    v->setScene(mRasterScene);
+    v->show();
+}
