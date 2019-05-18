@@ -20,14 +20,14 @@ int main(int argc, char *argv[])
     //QSurfaceFormat::setDefaultFormat(fmt);
 
 
-    QList<const QTouchDevice*> dvcs = QTouchDevice::devices();
-    for (int i = 0; i < dvcs.size(); ++i)
-    {
-        qDebug() << dvcs.at(i)->name();
-        qDebug() << dvcs.at(i)->type();
-        qDebug() << dvcs.at(i)->maximumTouchPoints();
-        qDebug() << dvcs.at(i)->capabilities();
-    }
+//    QList<const QTouchDevice*> dvcs = QTouchDevice::devices();
+//    for (int i = 0; i < dvcs.size(); ++i)
+//    {
+//        qDebug() << dvcs.at(i)->name();
+//        qDebug() << dvcs.at(i)->type();
+//        qDebug() << dvcs.at(i)->maximumTouchPoints();
+//        qDebug() << dvcs.at(i)->capabilities();
+//    }
 
     PenWindow w;
     w.showMaximized();

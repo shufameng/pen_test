@@ -46,6 +46,7 @@ private slots:
 
     void setScenesToolPen(const QPen &pen);
     void setScenesTool(int tool);
+    void on_actionOpenDialog_triggered();
 };
 
 

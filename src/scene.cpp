@@ -120,12 +120,11 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
         }
         else if (Pen_DrawPoints == mTool)
         {
-            QPainterPath path;
-
             switch (mConnectPointsMethod)
             {
             case StraightConnect:
             {
+                QPainterPath path;
                 for (int i = 0; i < mLastCollectedPoints.size(); ++ i) {
                     if (0 == i) {
                         path.moveTo(mLastCollectedPoints.at(i));
@@ -133,20 +132,69 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
                         path.lineTo(mLastCollectedPoints.at(i));
                     }
                 }
+                _addPath(path);
             }
                 break;
             case CurveConnect:
             {
+                QPainterPath path;
                 for (int i = 0; i + 2 < mLastCollectedPoints.size(); i += 2) {
                     if (0 == i) {
                         path.moveTo(mLastCollectedPoints.at(i));
                     }
                     path.quadTo(mLastCollectedPoints.at(i + 1), mLastCollectedPoints.at(i + 2));
                 }
+                _addPath(path);
             }
                 break;
             case CurveConnectMidWay:
             {
+                int pointsCount = mLastCollectedPoints.size();
+                QPointF current, next, lastDrawPoint;
+                QGraphicsItemGroup *group = new QGraphicsItemGroup;
+
+                if (pointsCount > 2)
+                {
+                    for (int i = 0; i < pointsCount; ++ i)
+                    {
+                        current = mLastCollectedPoints.at(i);
+                        if (i + 1 < pointsCount)
+                            next = mLastCollectedPoints.at(i + 1);
+
+                        if (i != 0)
+                        {
+                            QPointF temp = (current + next) / 2;
+                            QPainterPath path;
+                            path.moveTo(lastDrawPoint);
+                            path.quadTo(current, temp);
+                            group->addToGroup(_addPath(path));
+
+                            lastDrawPoint = temp;
+                        }
+                        else if (i == pointsCount - 1)
+                        {
+                            group->addToGroup(_addLine(QLineF(lastDrawPoint, current)));
+                        }
+                        else
+                        {
+                            lastDrawPoint = (current + next) / 2;
+                            group->addToGroup(_addLine(QLineF(current, lastDrawPoint)));
+                        }
+                    }
+                }
+                else if (pointsCount == 2)
+                {
+                    group->addToGroup(_addLine(QLineF(current, next)));
+                }
+
+                addItem(group);
+
+            }
+                break;
+
+            case CurveConnectMidWay_Use_PainterPath:
+            {
+                QPainterPath path;
                 QPointF current, next;
                 for (int i = 0; i + 1 < mLastCollectedPoints.size(); ++ i) {
 
@@ -159,20 +207,17 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
                     } else {
                         path.quadTo(current, (current + next) / 2);
                     }
-
                 }
+
+                _addPath(path);
             }
                 break;
+
             default:
                 break;
             }
 
-            // add pathitem to scene
-            QGraphicsPathItem *item = addPath(path);
-            item->setPen(toolPen());
-
             // delete points items
-
             PointItem *pointItem = NULL;
             for (int i = 0; i < mlastCreatedPointItems.size(); ++ i)
             {
@@ -200,6 +245,15 @@ PointItem *Scene::_addPoint(const QPointF &point)
     item->setPen(toolPen());
     addItem(item);
 
+    return item;
+}
+
+QGraphicsPathItem *Scene::_addPath(const QPainterPath &path)
+{
+    QGraphicsPathItem *item = new QGraphicsPathItem;
+    item->setPen(toolPen());
+    item->setPath(path);
+    addItem(item);
     return item;
 }
 
@@ -252,16 +306,16 @@ void Scene::saveAs(const QString &filePath)
 
 void Scene::init()
 {
-    setSceneRect(0, 0, 1920, 1080);
+    setSceneRect(0, 0, 1920*3, 1080*3);
 
     mToolPen.setStyle(Qt::SolidLine);
     mToolPen.setCapStyle(Qt::RoundCap);
     mToolPen.setJoinStyle(Qt::RoundJoin);
     mToolPen.setColor(Qt::white);
-    mToolPen.setWidth(3);
+    mToolPen.setWidth(4);
 
     mTool = Pen_DrawPoints;
-    mConnectPointsMethod = CurveConnect;
+    mConnectPointsMethod = CurveConnectMidWay;
     mIsLButtonOnPress = false;
 
     QBrush b;

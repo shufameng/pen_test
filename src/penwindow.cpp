@@ -163,17 +163,9 @@ void PenWindow::setScenesTool(int tool)
     mOpenGLScene->setTool((Scene::Tool)tool);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void PenWindow::on_actionOpenDialog_triggered()
+{
+    View *v = new View;
+    v->setScene(new Scene);
+    v->show();
+}

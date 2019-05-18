@@ -28,7 +28,8 @@ public:
         NoConnect,
         StraightConnect,
         CurveConnect,
-        CurveConnectMidWay
+        CurveConnectMidWay,
+        CurveConnectMidWay_Use_PainterPath
     };
 
     explicit Scene(QObject *parent = 0);
@@ -41,6 +42,7 @@ protected:
 
     LineItem *_addLine(const QLineF &line);
     PointItem *_addPoint(const QPointF &point);
+    QGraphicsPathItem *_addPath(const QPainterPath &path);
 
 public slots:
     void setToolPen(const QPen &p)

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>233</width>
+    <width>315</width>
     <height>455</height>
    </rect>
   </property>
@@ -105,6 +105,11 @@
        <item>
         <property name="text">
          <string>Curve Connect Midway</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Curve Connect Midway_Use_PainterPath</string>
         </property>
        </item>
       </widget>
