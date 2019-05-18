@@ -73,7 +73,7 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
         }
         else if (Pen_DrawPoints == mTool)
         {
-            if (QLineF(mLButtonScenePos, sp).length() >= 0.5)
+            if (QLineF(mLButtonScenePos, sp).length() >= 0)
             {
                 mlastCreatedPointItems.append(_addPoint(sp));
                 mLButtonPressScenePos = sp;
