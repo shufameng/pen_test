@@ -166,6 +166,8 @@ void PenWindow::setScenesTool(int tool)
 void PenWindow::on_actionOpenDialog_triggered()
 {
     View *v = new View;
-    v->setScene(new Scene);
+    v->setWindowFlags(Qt::FramelessWindowHint | Qt::ToolTip);
+    v->setScene(mRasterScene);
+    v->resize(600, 400);
     v->show();
 }
