@@ -190,7 +190,7 @@ void PenWindow::on_actionCurveConnectUsePainterPath_triggered()
 void PenWindow::on_actionOpenFramelessDialog_triggered()
 {
     View *v = new View;
-    v->setWindowFlags(Qt::FramelessWindowHint | Qt::ToolTip);
+    v->setWindowFlags(Qt::FramelessWindowHint | Qt::ToolTip | Qt::MSWindowsOwnDC);
     v->setScene(mRasterScene);
     v->resize(600, 400);
     v->show();
