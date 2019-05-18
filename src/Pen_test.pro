@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     additemthread.cpp \
     items.cpp \
     edgeblureffect.cpp \
-    itemgroup.cpp
+    itemgroup.cpp \
+    stackedwidget.cpp
 
 HEADERS  += penwindow.h \
     openglwidget.h \
@@ -32,7 +33,8 @@ HEADERS  += penwindow.h \
     additemthread.h \
     items.h \
     edgeblureffect.h \
-    itemgroup.h
+    itemgroup.h \
+    stackedwidget.h
 
 FORMS    += penwindow.ui \
     pensetwidget.ui

@@ -9,6 +9,7 @@
 #include <QColorDialog>
 #include "commonfunc.h"
 #include <QFileDialog>
+#include "stackedwidget.h"
 
 PenWindow::PenWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -166,10 +167,8 @@ void PenWindow::setScenesTool(int tool)
 
 void PenWindow::on_actionOpenDialog_triggered()
 {
-    View *v = new View;
-    v->setScene(mRasterScene);
-    v->resize(600, 400);
-    v->showFullScreen();
+    StackedWidget *w = new StackedWidget;
+    w->show();
 }
 
 void PenWindow::on_actionCleanAll_triggered()
@@ -190,8 +189,8 @@ void PenWindow::on_actionCurveConnectUsePainterPath_triggered()
 void PenWindow::on_actionOpenFramelessDialog_triggered()
 {
     View *v = new View;
-    v->setWindowFlags(Qt::FramelessWindowHint | Qt::ToolTip | Qt::MSWindowsOwnDC);
+    //v->setWindowFlags(Qt::FramelessWindowHint);
     v->setScene(mRasterScene);
     v->resize(600, 400);
-    v->show();
+    v->showFullScreen();
 }

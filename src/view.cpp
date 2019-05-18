@@ -55,6 +55,7 @@ void View::init()
     mUseOpenGL = false;
     setResizeAnchor(QGraphicsView::NoAnchor);
     setTransformationAnchor(QGraphicsView::NoAnchor);
+    setFrameShape(QFrame::NoFrame);
     //setViewportUpdateMode(QGraphicsView::NoViewportUpdate);
     setRenderHints(QPainter::Antialiasing);
     //setCacheMode(QGraphicsView::CacheBackground);
