@@ -169,7 +169,7 @@ void PenWindow::on_actionOpenDialog_triggered()
     View *v = new View;
     v->setScene(mRasterScene);
     v->resize(600, 400);
-    v->show();
+    v->showFullScreen();
 }
 
 void PenWindow::on_actionCleanAll_triggered()
