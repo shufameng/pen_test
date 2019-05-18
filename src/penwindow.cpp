@@ -21,11 +21,12 @@ PenWindow::PenWindow(QWidget *parent) :
     mRasterView = new View();
     mRasterView->setScene(mRasterScene = new Scene());
 
+    mRasterView->show();
     mOpenGLView = new View();
     mOpenGLView->setScene(mOpenGLScene = new Scene());
 
     QHBoxLayout *hlay = new QHBoxLayout(centralWidget());
-    hlay->addWidget(mRasterView);
+    //hlay->addWidget(mRasterView);
     //hlay->addWidget(mOpenGLView);
 
     // PenSetWidget
