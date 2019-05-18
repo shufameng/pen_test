@@ -26,7 +26,7 @@ PenWindow::PenWindow(QWidget *parent) :
     mOpenGLView->setScene(mOpenGLScene = new Scene());
 
     QHBoxLayout *hlay = new QHBoxLayout(centralWidget());
-    //hlay->addWidget(mRasterView);
+    hlay->addWidget(mRasterView);
     //hlay->addWidget(mOpenGLView);
 
     // PenSetWidget
@@ -165,6 +165,29 @@ void PenWindow::setScenesTool(int tool)
 }
 
 void PenWindow::on_actionOpenDialog_triggered()
+{
+    View *v = new View;
+    v->setScene(mRasterScene);
+    v->resize(600, 400);
+    v->show();
+}
+
+void PenWindow::on_actionCleanAll_triggered()
+{
+    onCleanAll();
+}
+
+void PenWindow::on_actionCurveConnect_triggered()
+{
+    mRasterScene->setConnectPointsMethod(Scene::CurveConnect);
+}
+
+void PenWindow::on_actionCurveConnectUsePainterPath_triggered()
+{
+    mRasterScene->setConnectPointsMethod(Scene::CurveConnectMidWay_Use_PainterPath);
+}
+
+void PenWindow::on_actionOpenFramelessDialog_triggered()
 {
     View *v = new View;
     v->setWindowFlags(Qt::FramelessWindowHint | Qt::ToolTip);

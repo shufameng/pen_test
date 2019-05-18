@@ -47,6 +47,10 @@ private slots:
     void setScenesToolPen(const QPen &pen);
     void setScenesTool(int tool);
     void on_actionOpenDialog_triggered();
+    void on_actionCleanAll_triggered();
+    void on_actionCurveConnect_triggered();
+    void on_actionCurveConnectUsePainterPath_triggered();
+    void on_actionOpenFramelessDialog_triggered();
 };
 
 

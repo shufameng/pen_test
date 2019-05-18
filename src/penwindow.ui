@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>683</width>
+    <height>422</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>683</width>
      <height>23</height>
     </rect>
    </property>
@@ -32,11 +32,41 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionOpenDialog"/>
+   <addaction name="actionOpenFramelessDialog"/>
+   <addaction name="actionCleanAll"/>
+   <addaction name="actionCurveConnect"/>
+   <addaction name="actionCurveConnectUsePainterPath"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpenDialog">
    <property name="text">
     <string>OpenDialog</string>
+   </property>
+  </action>
+  <action name="actionCleanAll">
+   <property name="text">
+    <string>CleanAll</string>
+   </property>
+  </action>
+  <action name="actionCurveConnect">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>CurveConnect</string>
+   </property>
+  </action>
+  <action name="actionCurveConnectUsePainterPath">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>CurveConnectUsePainterPath</string>
+   </property>
+  </action>
+  <action name="actionOpenFramelessDialog">
+   <property name="text">
+    <string>OpenFramelessDialog</string>
    </property>
   </action>
  </widget>
